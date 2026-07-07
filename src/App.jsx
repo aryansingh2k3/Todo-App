@@ -1,11 +1,13 @@
 import { useState } from "react";
+import "./App.css";
 
 function App() {
   const [task, setTask] = useState("");
   const [tasks, setTasks] = useState([]);
 
+  // Add Task
   const addTask = () => {
-    if (task === "") {
+    if (task.trim() === "") {
       alert("Please Enter Task");
       return;
     }
@@ -14,11 +16,22 @@ function App() {
     setTask("");
   };
 
-  return (
-    <>
-      <div>
-        <h1>Todo App</h1>
+  // Delete Task
+  const deleteTask = (indexToDelete) => {
+    const updatedTasks = tasks.filter((item, index) => {
+      return index !== indexToDelete;
+    });
 
+    setTasks(updatedTasks);
+  };
+
+  return (
+    <div className="container">
+      <h1>Todo App</h1>
+
+      <h3>Total Tasks: {tasks.length}</h3>
+
+      <div className="input-section">
         <input
           type="text"
           placeholder="Enter Task"
@@ -27,14 +40,24 @@ function App() {
         />
 
         <button onClick={addTask}>Add Task</button>
+      </div>
 
+      {tasks.length === 0 ? (
+        <p>No Tasks Available</p>
+      ) : (
         <ul>
           {tasks.map((item, index) => (
-            <li key={index}>{item}</li>
+            <li key={index}>
+              <span>{item}</span>
+
+              <button onClick={() => deleteTask(index)}>
+                Delete
+              </button>
+            </li>
           ))}
         </ul>
-      </div>
-    </>
+      )}
+    </div>
   );
 }
 
