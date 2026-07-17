@@ -50,11 +50,16 @@ function App() {
 
       <div className="input-section">
         <input
-          type="text"
-          placeholder="Enter Task"
-          value={task}
-          onChange={(e) => setTask(e.target.value)}
-        />
+  type="text"
+  placeholder="Enter Task"
+  value={task}
+  onChange={(e) => setTask(e.target.value)}
+  onKeyDown={(e) => {
+    if (e.key === "Enter") {
+      addTask();
+    }
+  }}
+/>
 
         <button onClick={addTask}>Add Task</button>
       </div>
