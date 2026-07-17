@@ -5,6 +5,9 @@ function App() {
   const [task, setTask] = useState("");
   const [tasks, setTasks] = useState([]);
 
+  const [editIndex, setEditIndex] = useState(null);
+  const [editTask, setEditTask] = useState("");
+
   // Add Task
   const addTask = () => {
     if (task.trim() === "") {
@@ -23,6 +26,20 @@ function App() {
     });
 
     setTasks(updatedTasks);
+  };
+
+  // Save Edited Task
+  const saveTask = () => {
+    const updatedTasks = tasks.map((item, index) => {
+      if (index === editIndex) {
+        return editTask;
+      }
+      return item;
+    });
+
+    setTasks(updatedTasks);
+    setEditIndex(null);
+    setEditTask("");
   };
 
   return (
@@ -48,11 +65,34 @@ function App() {
         <ul>
           {tasks.map((item, index) => (
             <li key={index}>
-              <span>{item}</span>
+              {editIndex === index ? (
+                <input
+                  type="text"
+                  value={editTask}
+                  onChange={(e) => setEditTask(e.target.value)}
+                />
+              ) : (
+                <span>{item}</span>
+              )}
 
-              <button onClick={() => deleteTask(index)}>
-                Delete
-              </button>
+              <div>
+                {editIndex === index ? (
+                  <button onClick={saveTask}>Save</button>
+                ) : (
+                  <button
+                    onClick={() => {
+                      setEditIndex(index);
+                      setEditTask(item);
+                    }}
+                  >
+                    Edit
+                  </button>
+                )}
+
+                <button onClick={() => deleteTask(index)}>
+                  Delete
+                </button>
+              </div>
             </li>
           ))}
         </ul>
